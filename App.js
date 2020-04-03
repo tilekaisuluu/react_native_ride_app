@@ -5,7 +5,6 @@ import Icon from '@expo/vector-icons/Ionicons';
 import {
   createSwitchNavigator,
   createAppContainer,
-  createStackNavigator
 } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer'
 import Login from './app/components/login';

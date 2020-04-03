@@ -8,21 +8,48 @@ import {
 } from 'react-native'
 
 export default class Register extends React.Component {
-  state = {
-    name: '', surname: '', username: '', password: '', email: '', phone_number: '', select_city: '', promo_code: '',
-  }
-  onChangeText = (key, val) => {
-    this.setState({ [key]: val })
-  }
-  signUp = async () => {
-    const { username, password, email, phone_number } = this.state
-    try {
-      // here place your signup logic
-      console.log('user successfully signed up!: ', success)
-    } catch (err) {
-      console.log('error signing up: ', err)
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '', 
+      password: '', 
+      email: ''
     }
   }
+
+UserRegistrationFunction = () => {
+  const { username } = this.state;
+  const { password } = this.state;
+  const { email } = this.state;
+
+fetch('http://192.168.1.8:8080/api/v1/users', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                email: email
+            })
+        })
+
+            .then((response) => {
+              if(response.statusText == "OK" && response.status >= 200 && response.status < 300) {
+                return response.json()
+            } else {
+                throw new Error("Server can't be reached!")
+          }
+      })
+            .then((responseJson) => {
+              Alert.alert(responseJson);
+              this.props.navigation.navigate('TermsOfUse')
+
+            }).catch((error) => {
+              console.error(error);
+            });
+          }
  
   render() {
     const { navigate } = this.props.navigation;
@@ -32,24 +59,10 @@ export default class Register extends React.Component {
           <Text>Let's start the registration</Text>
         <TextInput
           style={styles.input}
-          placeholder='Name'
-          autoCapitalize="none"
-          placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('name', val)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Surname'
-          autoCapitalize="none"
-          placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('surname', val)}
-        />
-        <TextInput
-          style={styles.input}
           placeholder='Username'
           autoCapitalize="none"
           placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('username', val)}
+          onChangeText={username => this.setState({username})}
         />
         <TextInput
           style={styles.input}
@@ -57,42 +70,22 @@ export default class Register extends React.Component {
           secureTextEntry={true}
           autoCapitalize="none"
           placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('password', val)}
+          onChangeText={password => this.setState({password})}
         />
         <TextInput
           style={styles.input}
           placeholder='Email'
           autoCapitalize="none"
           placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('email', val)}
+          onChangeText={email => this.setState({email})}
         />
-        <TextInput
-          style={styles.input}
-          placeholder='Phone Number'
-          autoCapitalize="none"
-          placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('phone_number', val)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Select City'
-          autoCapitalize="none"
-          placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('select_city', val)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Promo Code'
-          autoCapitalize="none"
-          placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('promo_code', val)}
-        />
+        
         <Text style={styles.text}>By proceeding, I agree to Uber's Terms of Use and acknowledge that I have read the Privacy Policy.
 
 I also agree that Uber or its representatives may contact me by email, phone, or SMS (including by automated means) at the email address or number I provide, including for marketing purposes.</Text>
         <Button
           title='Sign Up'
-          onPress={() => navigate('TermsOfUse')}
+          onPress={this.UserRegistrationFunction}
           />
       </View>
     )

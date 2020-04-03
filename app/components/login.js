@@ -9,22 +9,10 @@ export default class Login extends React.Component {
             password: '',
         }
     }
-    componentDidMount() {
-        this._loadInitialState().done();
-    }
-    _loadInitialState = async () => {
-        var value = await AsyncStorage.getItem('user');
-        if (value !== null) {
-            this.props.navigation.navigate('Profile');
-        }
-    }
-
 
     static navigationOptions = {
         header: null,
-        
     };
-
 
     render() {
 

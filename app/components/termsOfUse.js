@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Button, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, AsyncStorage } from 'react-native';
 
-export default class Login extends React.Component {
+export default class TermsOfUse extends React.Component {
 
 
     static navigationOptions = {
